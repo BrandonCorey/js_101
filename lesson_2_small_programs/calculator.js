@@ -4,41 +4,44 @@
 // Perform the operation on the two numbers
 // Log the result to the terminal
 const readline = require('readline-sync');
+const MESSAGES = require('./calculator_messages.json');
 let firstNum;
 let secondNum;
 let operation;
 
-prompt('Weclome to Calculator!');
+prompt(MESSAGES['welcome']);
 calculator();
 
 // Main function
 function calculator() {
   input();
   output();
-  let calcAgainQ = readline.question(prompt("Would you like to perform another calculation? "));
+  let calcAgainQ = readline.question(prompt(MESSAGES['calcAgain']));
   calcAgain(calcAgainQ);
 }
 
 // Function to ask for valid inputs
 function input() {
-  prompt("What's the first number? ");
+  prompt(MESSAGES['first']);
   firstNum = readline.question(); // Takes user input and returns it as a string
 
   while (invalidNumber(firstNum)) {
-    prompt("Hmmm... that doesn't look like a valid number. Try again! ");
+    prompt(MESSAGES['invalidNum']);
     firstNum = readline.question();
   }
 
-  secondNum = readline.question(prompt("What's the second number? "));
-  while (invalidNumber(firstNum)) {
-    prompt("Hmmm... that doesn't look like a valid number. Try again! ");
-    firstNum = readline.question();
+  prompt(MESSAGES['second']);
+  secondNum = readline.question();
+
+  while (invalidNumber(secondNum)) {
+    prompt(MESSAGES['invalidNum']);
+    secondNum = readline.question();
   }
 
-  prompt("What operatio would you like to perform?\n1)Add 2)Subtract 3)Multiply 4)Divide ");
+  prompt(MESSAGES['operation']);
   operation = readline.question();
   while (!['1' , '2', '3', '4'].includes(operation)) {
-    prompt('Must choose 1, 2, 3, or 4.');
+    prompt(MESSAGES['invalidOperation']);
     operation = readline.question();
   }
 }
@@ -80,7 +83,7 @@ function calcAgain(input) {
   if (input === 'y' || input === 'yes') return calculator();
   if (input === 'n' || input === 'no') return 1;
   else {
-    prompt("Whoops! That's an invalid input. Must choose y or n");
+    prompt(MESSAGES['invalidAgain']);
   }
   return 0;
 }
