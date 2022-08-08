@@ -5,23 +5,54 @@
 // Log the result to the terminal
 const readline = require('readline-sync');
 
-console.log('Weclome to Calculator!');
+prompt('Weclome to Calculator!');
 
-console.log("What's the first number?")
+prompt("What's the first number?");
 let firstNum = readline.question(); // Takes user input and returns it as a string
-console.log("What's the second number?");
+
+while (invalidNumber(firstNum)) {
+  prompt("Hmmm... that doesn't look like a valid number.");
+  firstNum = readline.question();
+}
+
+prompt("What's the second number?");
 let secondNum = readline.question();
-console.log("What operatio would you like to perform?\n1)Add 2)Subtract 3)Multiply 4)Divide");
-let oepration = readline.question();
+
+while (invalidNumber(firstNum)) {
+  prompt("Hmmm... that doesn't look like a valid number.");
+  firstNum = readline.question();
+}
+
+prompt("What operatio would you like to perform?\n1)Add 2)Subtract 3)Multiply 4)Divide");
+let operation = readline.question();
+
+while (!['1' , '2', '3', '4'].includes(operation)) {
+  prompt('Must choose 1, 2, 3, or 4.');
+  operation = readline.question();
+}
 
 let output;
-if (oepration === '1') {
-  output = Number(firstNum) + Number(secondNum);
-} else if (oepration === '2') {
-  output = Number(firstNum) - Number(secondNum);
-} else if (oepration === '3') {
-  output = Number(firstNum) * Number(secondNum);
-} else if (oepration === '4') {
-  output = Number(firstNum) / Number(secondNum);
+switch (operation) {
+  case '1':
+    output = Number(firstNum) + Number(secondNum);
+    break;
+  case '2':
+    output = Number(firstNum) - Number(secondNum);
+    break;
+  case '3':
+    output = Number(firstNum) * Number(secondNum);
+    break;
+  case '4':
+    output = Number(firstNum) / Number(secondNum);
+    break;
 }
-console.log(output);
+prompt(output);
+
+//functions
+function prompt(message) {
+  console.log(`=> ${message}`);
+}
+
+function invalidNumber(num) {
+  return num.trimStart() === '' || Number.isNaN(Number(num)); // tries to coerce num to number using contructor, then uses constructer again with isNaN to check if number.
+}

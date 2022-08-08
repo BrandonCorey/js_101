@@ -13,7 +13,7 @@
 // SET thirdOccurence = function that takes stringArr and char
 //   SET charArr = stringArr.split('')
 //   SET iterator = 0
-//   SET charCounter = 0  
+//   SET charCounter = 0
 //   WHILE (iterator < length)
 //     IF char === charArr[iterator]
 //       charCounter += 1;
@@ -25,11 +25,11 @@
 
 
 function thirdOccurence(str, char) {
-  let charArr = str.split('')
+  let charArr = str.split('');
   let charCounter = 0;
-  for (let i = 0; i < charArr.length; i++) {
-    if (char === charArr[i]) charCounter += 1;
-    if (charCounter === 3) return i
+  for (let counter = 0; counter < charArr.length; counter++) {
+    if (char === charArr[counter]) charCounter += 1;
+    if (charCounter === 3) return counter;
   }
   return null;
 }
