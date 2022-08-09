@@ -17,12 +17,65 @@ let loanAmount; //
 let rate; // monthly (convert from annual to monthly)
 let duration; // years (convert to monthly for calcs)
 const readline = require('readline-sync');
-const MPAYMENT = loanAmount * (rate / (1 - Math.pow((1 + rate), (-duration))));
 
+// Main function calls
+getValidInputs();
+prompt(`Your monthly payment is: ${calculate()}`);
+
+// Function to get inputs and validate them
 function getValidInputs() {
+  console.log('-- Mortage Calculator 2022™ --');
 
+  prompt('Please enter the loan amount:');
+  loanAmount = readline.question();
+
+  invalidDetection(loanAmount);
+
+  prompt('What is the interest rate of the loan (%)?');
+  rate = readline.question();
+
+  invalidDetection(rate);
+
+  prompt('And what is the loan duration (in years)?');
+  duration = readline.question();
+
+  invalidDetection(duration);
+
+  let monthlyObj = conversionYtoM(rate, duration);
+  rate = monthlyObj.interest;
+  duration = monthlyObj.months;
+  console.log(rate);
+  console.log(duration);
 }
 
+//Function that calculates the monthly payment
+function calculate() {
+  let pay;
+  pay = Number(loanAmount * (rate / (1 - Math.pow((1 + rate), (-duration)))));
+  return pay.toFixed(2);
+}
+
+// Helper functions
+
+// Makes prompt less bland
 function prompt(message) {
-  return '=>' + message;
+  console.log('=> ' + message);
+}
+
+// Handles number validation
+function invalidDetection(input) {
+  while (input.trimStart() === '' || Number(input < 1) || Number.isNaN(+(input))) {
+    prompt('Whoops! Please enter a valid number:');
+    input = readline.question();
+  }
+}
+
+// Stores converted values in object
+function conversionYtoM(interest, years) {
+  let convertedObj = {};
+  interest = Number(interest);
+  years = Number(years);
+  convertedObj.interest = (interest / 100) / 12;
+  convertedObj.months = years * 12;
+  return convertedObj;
 }
