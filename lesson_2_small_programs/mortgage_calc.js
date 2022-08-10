@@ -77,11 +77,7 @@ function conversionYtoM(interest, years) {
 
   // Converts decimals to ints
   if (interest < 1 && interest > 0) {
-    let decimal = interest.indexOf('.');
-    interest = interest.slice(decimal);
-    let orderOfMagnitude = interest.length - 1;
-    interest = Number(interest);
-    interest *= Math.pow(10, orderOfMagnitude);
+    interest = decimalToInt(interest);
   }
 
   // Converts yearly to monthly and stores in object
@@ -90,4 +86,13 @@ function conversionYtoM(interest, years) {
   convertedObj.interest = (interest / 100) / 12;
   convertedObj.months = years * 12;
   return convertedObj;
+}
+
+function decimalToInt(decimalInterest) {
+  let decimal = decimalInterest.indexOf('.');
+  decimalInterest = decimalInterest.slice(decimal);
+  let orderOfMagnitude = decimalInterest.length - 1;
+  decimalInterest = Number(decimalInterest);
+  decimalInterest *= Math.pow(10, orderOfMagnitude);
+  return decimalInterest;
 }
