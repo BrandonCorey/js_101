@@ -31,7 +31,7 @@ function getValidInputs() {
 
   invalidDetection(loanAmount);
 
-  prompt('What is the interest rate of the loan (%)?');
+  prompt('What is the interest rate of the loan (% or decimal)?');
   rate = readline.question();
 
   invalidDetection(rate);
@@ -52,6 +52,7 @@ function getValidInputs() {
 function calculate() {
   let pay;
   pay = Number(loanAmount * (rate / (1 - Math.pow((1 + rate), (-duration)))));
+  if (Number.isNaN(pay)) return 0;
   return pay.toFixed(2);
 }
 
@@ -64,15 +65,26 @@ function prompt(message) {
 
 // Handles number validation
 function invalidDetection(input) {
-  while (input.trimStart() === '' || Number(input < 1) || Number.isNaN(+(input))) {
+  while (input.trimStart() === '' || Number(input) < 0 || Number.isNaN(+(input))) {
     prompt('Whoops! Please enter a valid number:');
     input = readline.question();
   }
 }
 
-// Stores converted values in object
+// Converts inputs to numbers and monthly amounts
 function conversionYtoM(interest, years) {
   let convertedObj = {};
+
+  // Converts decimals to ints
+  if (interest < 1 && interest > 0) {
+    let decimal = interest.indexOf('.');
+    interest = interest.slice(decimal);
+    let orderOfMagnitude = interest.length - 1;
+    interest = Number(interest);
+    interest *= Math.pow(10, orderOfMagnitude);
+  }
+
+  // Converts yearly to monthly and stores in object
   interest = Number(interest);
   years = Number(years);
   convertedObj.interest = (interest / 100) / 12;
