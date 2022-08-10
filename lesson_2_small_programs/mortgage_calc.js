@@ -18,9 +18,10 @@ let rate; // monthly (convert from annual to monthly)
 let duration; // years (convert to monthly for calcs)
 const readline = require('readline-sync');
 
-// Main function calls
+// Main-function calls
 getValidInputs();
-prompt(`Your monthly payment is: ${calculate()}`);
+let monthlyPayment = calculate();
+prompt(`Your monthly payment is: ${monthlyPayment}`);
 
 // Function to get inputs and validate them
 function getValidInputs() {
@@ -44,8 +45,6 @@ function getValidInputs() {
   let monthlyObj = conversionYtoM(rate, duration);
   rate = monthlyObj.interest;
   duration = monthlyObj.months;
-  console.log(rate);
-  console.log(duration);
 }
 
 //Function that calculates the monthly payment
