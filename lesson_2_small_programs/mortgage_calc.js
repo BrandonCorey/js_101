@@ -20,9 +20,7 @@ const readline = require('readline-sync');
 
 // Main-function calls
 getValidInputs();
-let monthlyPayment = calculate();
-
-prompt(`Your monthly payment is: ${monthlyPayment}`);
+prompt(`Your monthly payment is: ${calculate()}`);
 
 // Function to get inputs and validate them
 function getValidInputs() {
