@@ -13,14 +13,15 @@
 // Duration input --> Will we support non-integer number of years?
 
 // Global variables
-let loanAmount; //
-let rate; // monthly (convert from annual to monthly)
-let duration; // years (convert to monthly for calcs)
+let loanAmount;
+let rate;
+let duration;
 const readline = require('readline-sync');
 
 // Main-function calls
 getValidInputs();
 let monthlyPayment = calculate();
+
 prompt(`Your monthly payment is: ${monthlyPayment}`);
 
 // Function to get inputs and validate them
@@ -74,7 +75,7 @@ function invalidDetection(input) {
 function conversionYtoM(interest, years) {
   let convertedObj = {};
 
-  // Converts decimals to ints
+  // Considers any value less than one a decimal interest rate
   if (interest < 1 && interest > 0) {
     interest = decimalToInt(interest);
   }
@@ -86,7 +87,7 @@ function conversionYtoM(interest, years) {
   convertedObj.months = years * 12;
   return convertedObj;
 }
-
+// Converts decimals to ints
 function decimalToInt(decimalInterest) {
   let decimal = decimalInterest.indexOf('.');
   decimalInterest = decimalInterest.slice(decimal);
