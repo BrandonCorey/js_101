@@ -46,7 +46,7 @@ function getValidInputs() {
   duration = monthlyObj.months;
 }
 
-//Function that calculates the monthly payment
+//Function to calculate monthly payment
 function calculate() {
   let pay;
   pay = Number(loanAmount * (rate / (1 - Math.pow((1 + rate), (-duration)))));
@@ -69,7 +69,7 @@ function invalidDetection(input) {
   }
 }
 
-// Converts inputs to numbers and monthly amounts
+// Converts inputs to monthly amounts
 function conversionYtoM(interest, years) {
   let convertedObj = {};
 
