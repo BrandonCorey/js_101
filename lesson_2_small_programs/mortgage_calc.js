@@ -22,7 +22,7 @@ const readline = require('readline-sync');
 getValidInputs();
 prompt(`Your monthly payment is: ${calculate()}`);
 
-// Function to get inputs and validate them
+// Function to get inputs
 function getValidInputs() {
   console.log('-- Mortage Calculator 2022™ --');
 
