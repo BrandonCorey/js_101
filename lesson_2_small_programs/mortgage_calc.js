@@ -28,17 +28,14 @@ function getValidInputs() {
 
   prompt('Please enter the loan amount:');
   loanAmount = readline.question();
-
   invalidDetection(loanAmount);
 
   prompt('What is the interest rate of the loan (% or decimal)?');
   rate = readline.question();
-
   invalidDetection(rate);
 
   prompt('And what is the loan duration (in years)?');
   duration = readline.question();
-
   invalidDetection(duration);
 
   let monthlyObj = conversionYtoM(rate, duration);
