@@ -3,7 +3,7 @@
 // dipslay winner
 
 const readline = require('readline-sync');
-const VALID_CHOICES = ['rock', 'paper', 'scissors'];
+const VALID_CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
 
 function prompt(message) {
   console.log(`=> ${message}`);
@@ -11,8 +11,16 @@ function prompt(message) {
 
 // Main program asks for information
 while (true) {
+
   prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
   let humanChoice = readline.question();
+
+  let abbrev = VALID_CHOICES.map(element => {
+    let firstChar = element.split('')[0];
+    return firstChar;
+  });
+
+  console.log(abbrev);
 
   while (!VALID_CHOICES.includes(humanChoice)) {
     prompt("Whoops...please enter a valid choice!");
@@ -39,7 +47,10 @@ function dipslayWinner (humanChoice, cpuChoice, randIndex) {
   prompt(`You chose ${humanChoice}. Computer chose ${cpuChoice}.`);
 
   let humanChoiceIndex = VALID_CHOICES.indexOf(humanChoice);
-  if (randIndex - humanChoiceIndex === 1) {
+  const cpuWinCondition = [1, 3, -2, -4]; // --> All index differentials where computer wins
+  const cpuWinFormula = randIndex - humanChoiceIndex;
+
+  if (cpuWinCondition.includes(cpuWinFormula)) {
     prompt('Computer wins!');
   } else if (randIndex === humanChoiceIndex) {
     prompt('It\'s a tie');
