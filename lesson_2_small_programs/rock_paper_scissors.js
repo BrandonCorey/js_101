@@ -37,6 +37,7 @@ while (true) {
 // Caclulates the winner and displays on screen
 function dipslayWinner (humanChoice, cpuChoice, randIndex) {
   prompt(`You chose ${humanChoice}. Computer chose ${cpuChoice}.`);
+
   let humanChoiceIndex = VALID_CHOICES.indexOf(humanChoice);
   if (randIndex - humanChoiceIndex === 1) {
     prompt('Computer wins!');
