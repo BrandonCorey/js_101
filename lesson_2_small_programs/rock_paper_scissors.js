@@ -64,7 +64,7 @@ function checkAbbreviation(choice) {
   return 0;
 }
 
-// Adds an arrow to CLI prompt to user
+// Adds an arrow to CLI prompt
 function prompt(message) {
   console.log(`=> ${message}`);
 }
