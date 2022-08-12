@@ -3,15 +3,11 @@ const readline = require('readline-sync');
 const PROMPT_MESSAGES = require('./rps_message.json');
 const VALID_CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
 
-function prompt(message) {
-  console.log(`=> ${message}`);
-}
-
-// Main program asks for information
+// Main program gets input and returns winner
 while (true) {
 
   prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
-  console.log('               (r)    (p)     (s)     (sp)    (l)');
+  console.log(PROMPT_MESSAGES['abbrev']);
   let humanChoice = readline.question();
   humanChoice = checkAbbreviation(humanChoice);
   while (!VALID_CHOICES.includes(humanChoice)) {
@@ -32,7 +28,6 @@ while (true) {
   }
 
   if (answer[0] !== 'y') break;
-
 }
 
 // Caclulates the winner and displays on screen
@@ -52,6 +47,7 @@ function dipslayWinner (humanChoice, cpuChoice, randIndex) {
   }
 }
 
+// Converts abbreviated inputs to full name for logic
 function checkAbbreviation(choice) {
   switch (choice) {
     case 'r':
@@ -66,4 +62,9 @@ function checkAbbreviation(choice) {
       return 'spock';
   }
   return 0;
+}
+
+// Adds an arrow to CLI prompt to user
+function prompt(message) {
+  console.log(`=> ${message}`);
 }
