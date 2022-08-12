@@ -1,0 +1,9 @@
+  {
+    "abbrev": "               (r)    (p)     (s)     (sp)    (l)",
+    "error": "Whoops...please enter a valid choice!",
+    "playAgain": "Do you want to play again (y/n)?",
+    "errorYorN": "Please enter 'y' or 'n'.",
+    "cpuWin": "Computer wins!",
+    "tie": "It's a tie",
+    "win": "You win!"
+  }

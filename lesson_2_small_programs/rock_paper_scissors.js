@@ -1,8 +1,6 @@
-// ask user for move
-// the computer makes choice
-// dipslay winner
 
 const readline = require('readline-sync');
+const PROMPT_MESSAGES = require('./rps_message.json');
 const VALID_CHOICES = ['rock', 'paper', 'scissors', 'spock', 'lizard'];
 
 function prompt(message) {
@@ -17,7 +15,7 @@ while (true) {
   let humanChoice = readline.question();
   humanChoice = checkAbbreviation(humanChoice);
   while (!VALID_CHOICES.includes(humanChoice)) {
-    prompt("Whoops...please enter a valid choice!");
+    prompt(PROMPT_MESSAGES["error"]);
     humanChoice = readline.question();
   }
 
@@ -26,10 +24,10 @@ while (true) {
 
   dipslayWinner(humanChoice, cpuChoice, randIndex);
 
-  prompt('Do you want to play again (y/n)?');
+  prompt(PROMPT_MESSAGES["playAgain"]);
   let answer = readline.question().toLowerCase();
   while (!(answer[0] === 'n' || answer === 'y')) {
-    prompt('Please enter "y" or "n".');
+    prompt(PROMPT_MESSAGES["errorYorN"]);
     answer = readline.question().toLowerCase();
   }
 
@@ -46,11 +44,11 @@ function dipslayWinner (humanChoice, cpuChoice, randIndex) {
   const cpuWinFormula = randIndex - humanChoiceIndex;
 
   if (cpuWinCondition.includes(cpuWinFormula)) {
-    prompt('Computer wins!');
+    prompt(PROMPT_MESSAGES['cpuWin']);
   } else if (randIndex === humanChoiceIndex) {
-    prompt('It\'s a tie');
+    prompt(PROMPT_MESSAGES['tie']);
   } else {
-    prompt('You win!');
+    prompt(PROMPT_MESSAGES['win']);
   }
 }
 
