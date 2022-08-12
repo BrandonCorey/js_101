@@ -13,15 +13,9 @@ function prompt(message) {
 while (true) {
 
   prompt(`Choose one: ${VALID_CHOICES.join(', ')}`);
+  console.log('               (r)    (p)     (s)     (sp)    (l)');
   let humanChoice = readline.question();
-
-  let abbrev = VALID_CHOICES.map(element => {
-    let firstChar = element.split('')[0];
-    return firstChar;
-  });
-
-  console.log(abbrev);
-
+  humanChoice = checkAbbreviation(humanChoice);
   while (!VALID_CHOICES.includes(humanChoice)) {
     prompt("Whoops...please enter a valid choice!");
     humanChoice = readline.question();
@@ -40,6 +34,7 @@ while (true) {
   }
 
   if (answer[0] !== 'y') break;
+
 }
 
 // Caclulates the winner and displays on screen
@@ -57,4 +52,20 @@ function dipslayWinner (humanChoice, cpuChoice, randIndex) {
   } else {
     prompt('You win!');
   }
+}
+
+function checkAbbreviation(choice) {
+  switch (choice) {
+    case 'r':
+      return 'rock';
+    case 'p':
+      return 'paper';
+    case 's':
+      return 'scissors';
+    case 'l':
+      return 'lizard';
+    case 'sp':
+      return 'spock';
+  }
+  return 0;
 }
