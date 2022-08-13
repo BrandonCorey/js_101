@@ -1,4 +1,5 @@
   {
+    "rules": "This is rock, paper, scissors, liazrd, spock!\nThe basic RPS rules apply with these additions.\n\n - Lizard beats paper, lizard beats Spock.\n - Rock beats lizard, scissors beats lizard.\n - Spock beats rock, Spock beats scissors.\n - Paper beats Spock.\n\nLets play!",
     "chooseOne": "Choose one: rock, paper, scissors, lizard, spock",
     "abbreviatons": "               (r)    (p)     (s)      (l)    (sp)\n",
     "error": "Whoops...please enter a valid choice!",

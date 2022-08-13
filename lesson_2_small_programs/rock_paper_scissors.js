@@ -5,35 +5,29 @@ const winCounter = createWinCounter();
 
 // Main program gets input and calls functions
 while (true) {
+  rules();
+  while (true) {
+    mainUI();
+    let humanChoice = askForChoice();
 
-  console.clear();
+    let cpuChoiceIndex = getRandomIndex();
+    let cpuChoice = VALID_CHOICES[cpuChoiceIndex];
 
-  displayWinCounter(winCounter);
-  console.log("-- Best of 5 --\n");
-  prompt(PROMPT_MESSAGES['chooseOne']);
-  console.log(PROMPT_MESSAGES['abbreviatons']);
+    let winnerOfRound = calcWinner(cpuChoiceIndex, humanChoice);
+    updateWinCounter(winnerOfRound, winCounter);
+    dipslayWinner(winnerOfRound, humanChoice, cpuChoice);
 
-  let humanChoice = readline.question().toLowerCase();
-  humanChoice = checkAbbreviation(humanChoice);
-  humanChoice = checkValidChoice(humanChoice);
+    let grandWinner = calcGrandWinner(winCounter);
+    if (grandWinner) {
+      displayGrandWinner(grandWinner);
+      resetScore(winCounter);
+    }
 
-  let cpuChoiceIndex = getRandomIndex();
-  let cpuChoice = VALID_CHOICES[cpuChoiceIndex];
-
-  let winnerOfRound = calcWinner(cpuChoiceIndex, humanChoice);
-  updateWinCounter(winnerOfRound, winCounter);
-  dipslayWinner(winnerOfRound, humanChoice, cpuChoice);
-
-  let grandWinner = calcGrandWinner(winCounter);
-  if (grandWinner) {
-    displayGrandWinner(grandWinner);
-    resetScore(winCounter);
+    let response = askToPlayAgain();
+    if (response[0] !== 'y') break;
   }
+  break;
 
-  prompt(PROMPT_MESSAGES["playAgain"]);
-  let response = readline.question().toLowerCase();
-  response = getValidPlayAgain(response);
-  if (response[0] !== 'y') break;
 }
 
 // Creates win couinter for CPU and human
@@ -45,9 +39,32 @@ function createWinCounter() {
   return counterObj;
 }
 
+function rules() {
+  while (true) {
+    console.clear();
+    console.log(PROMPT_MESSAGES['rules']);
+    if (readline.question("Press 's' to begin: ")) break;
+  }
+}
+
+function mainUI() {
+  console.clear();
+  displayWinCounter(winCounter);
+  console.log("-- Best of 5 --\n");
+  prompt(PROMPT_MESSAGES['chooseOne']);
+  console.log(PROMPT_MESSAGES['abbreviatons']);
+}
+
 function displayWinCounter (counter) {
   prompt(`Cpu wins: ${counter.cpu}`);
   prompt(`Your wins: ${counter.human}`);
+}
+
+function askForChoice() {
+  let humanChoice = readline.question().toLowerCase();
+  humanChoice = checkAbbreviation(humanChoice);
+  humanChoice = checkValidChoice(humanChoice);
+  return humanChoice;
 }
 
 // Converts abbreviated inputs to full name
@@ -132,13 +149,20 @@ function resetScore(counterObj) {
   counterObj.human = 0;
 }
 
+function askToPlayAgain() {
+  prompt(PROMPT_MESSAGES["playAgain"]);
+  let answer = readline.question().toLowerCase();
+  return getValidPlayAgain(answer);
+}
+
+
 // Validates play again input
-function getValidPlayAgain(response) {
-  while ((response[0] !== 'n' && response !== 'y')) {
+function getValidPlayAgain(answer) {
+  while ((answer[0] !== 'n' && answer !== 'y')) {
     prompt(PROMPT_MESSAGES["errorYorN"]);
-    response = readline.question().toLowerCase();
+    answer = readline.question().toLowerCase();
   }
-  return response;
+  return answer;
 }
 
 // Adds an arrow to CLI prompt
