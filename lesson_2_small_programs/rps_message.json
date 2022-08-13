@@ -1,9 +1,11 @@
   {
-    "abbrev": "               (r)    (p)     (s)     (sp)    (l)",
+    "abbrev": "               (r)    (p)     (s)     (sp)    (l)\n",
     "error": "Whoops...please enter a valid choice!",
     "playAgain": "Do you want to play again (y/n)?",
     "errorYorN": "Please enter 'y' or 'n'.",
     "cpuWin": "Computer wins!",
     "tie": "It's a tie",
-    "win": "You win!"
+    "win": "You win!",
+    "grandWinnerCpu": "The grand winner of the game is the computer!!",
+    "grandWinnerHuman": "The grand winner of the game is YOU!"
   }
