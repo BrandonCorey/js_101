@@ -18,8 +18,9 @@ while (true) {
   let cpuChoice = VALID_CHOICES[cpuChoiceIndex];
 
   let winnerOfRound = calcWinner(cpuChoiceIndex, humanChoice);
+  console.log(winnerOfRound);
   updateWinCounter(winnerOfRound, winCounter);
-  prompt(`You chose ${humanChoice}. The computer chose ${cpuChoice}`);
+  prompt(`You chose ${humanChoice}. The computer chose ${cpuChoice}.`);
   dipslayWinner(winnerOfRound);
 
   let grandWinner = calcGrandWinner(winCounter);
@@ -103,8 +104,8 @@ function calcWinner(cpuIndex, userChoice) {
 
 // Updates the win counter each round
 function updateWinCounter(roundWinner, counter) {
-  if (roundWinner === 'Computer wins!') counter.cpu += 1;
-  if (roundWinner === 'You win!') counter.human += 1;
+  if (roundWinner === 'cpuWin') counter.cpu += 1;
+  if (roundWinner === 'win') counter.human += 1;
   return winCounter;
 }
 
@@ -130,7 +131,7 @@ function getValidPlayAgain(response) {
   while (!(response[0] === 'n' || response === 'y')) {
     prompt(PROMPT_MESSAGES["errorYorN"]);
     response = readline.question();
-    response.toLowerCase();
+    response = response.toLowerCase();
   }
   return response;
 }
