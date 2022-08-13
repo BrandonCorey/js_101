@@ -6,7 +6,10 @@ const winCounter = createWinCounter();
 // Main program gets input and calls functions
 while (true) {
 
+  console.clear();
+
   displayWinCounter(winCounter);
+  console.log("-- Best of 5 --\n");
   prompt(PROMPT_MESSAGES['chooseOne']);
   console.log(PROMPT_MESSAGES['abbreviatons']);
 
@@ -18,22 +21,18 @@ while (true) {
   let cpuChoice = VALID_CHOICES[cpuChoiceIndex];
 
   let winnerOfRound = calcWinner(cpuChoiceIndex, humanChoice);
-  console.log(winnerOfRound);
   updateWinCounter(winnerOfRound, winCounter);
-  prompt(`You chose ${humanChoice}. The computer chose ${cpuChoice}.`);
-  dipslayWinner(winnerOfRound);
+  dipslayWinner(winnerOfRound, humanChoice, cpuChoice);
 
   let grandWinner = calcGrandWinner(winCounter);
   if (grandWinner) {
     displayGrandWinner(grandWinner);
-    break;
+    resetScore(winCounter);
   }
 
   prompt(PROMPT_MESSAGES["playAgain"]);
   let response = readline.question().toLowerCase();
-
-  getValidPlayAgain(response);
-
+  response = getValidPlayAgain(response);
   if (response[0] !== 'y') break;
 }
 
@@ -48,7 +47,7 @@ function createWinCounter() {
 
 function displayWinCounter (counter) {
   prompt(`Cpu wins: ${counter.cpu}`);
-  prompt(`Your wins: ${counter.human}\n`);
+  prompt(`Your wins: ${counter.human}`);
 }
 
 // Converts abbreviated inputs to full name
@@ -110,14 +109,15 @@ function updateWinCounter(roundWinner, counter) {
 }
 
 // Prints winner on screen
-function dipslayWinner (winner) {
+function dipslayWinner (winner, userChioce, computerChoice) {
+  prompt(`You chose ${userChioce}. The computer chose ${computerChoice}.`);
   prompt(PROMPT_MESSAGES[winner]);
 }
 
 // Calculates the grand winner
 function calcGrandWinner (counter) {
-  if (counter.cpu === 5) return 'grandWinnerCpu';
-  if (counter.human === 5) return 'grandWinnerHuman';
+  if (counter.cpu === 3) return 'grandWinnerCpu';
+  if (counter.human === 3) return 'grandWinnerHuman';
   return 0;
 }
 
@@ -128,10 +128,9 @@ function displayGrandWinner(grandWinner) {
 
 // Validates play again input
 function getValidPlayAgain(response) {
-  while (!(response[0] === 'n' || response === 'y')) {
+  while ((response[0] !== 'n' && response !== 'y')) {
     prompt(PROMPT_MESSAGES["errorYorN"]);
-    response = readline.question();
-    response = response.toLowerCase();
+    response = readline.question().toLowerCase();
   }
   return response;
 }
@@ -139,4 +138,10 @@ function getValidPlayAgain(response) {
 // Adds an arrow to CLI prompt
 function prompt(message) {
   console.log(`=> ${message}`);
+}
+
+// Resets score if user wants to play again
+function resetScore(counterObj) {
+  counterObj.cpu = 0;
+  counterObj.human = 0;
 }
