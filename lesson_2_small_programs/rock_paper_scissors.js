@@ -126,6 +126,12 @@ function displayGrandWinner(grandWinner) {
   prompt(PROMPT_MESSAGES[grandWinner]);
 }
 
+// Resets score if user wants to play again
+function resetScore(counterObj) {
+  counterObj.cpu = 0;
+  counterObj.human = 0;
+}
+
 // Validates play again input
 function getValidPlayAgain(response) {
   while ((response[0] !== 'n' && response !== 'y')) {
@@ -138,10 +144,4 @@ function getValidPlayAgain(response) {
 // Adds an arrow to CLI prompt
 function prompt(message) {
   console.log(`=> ${message}`);
-}
-
-// Resets score if user wants to play again
-function resetScore(counterObj) {
-  counterObj.cpu = 0;
-  counterObj.human = 0;
 }
