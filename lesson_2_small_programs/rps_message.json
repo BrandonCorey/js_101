@@ -1,5 +1,6 @@
   {
-    "abbrev": "               (r)    (p)     (s)     (sp)    (l)\n",
+    "chooseOne": "Choose one: rock, paper, scissors, lizard, spock",
+    "abbreviatons": "               (r)    (p)     (s)      (l)    (sp)\n",
     "error": "Whoops...please enter a valid choice!",
     "playAgain": "Do you want to play again (y/n)?",
     "errorYorN": "Please enter 'y' or 'n'.",
