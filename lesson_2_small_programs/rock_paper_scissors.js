@@ -19,7 +19,7 @@ while (true) {
 
   let winnerOfRound = calcWinner(cpuChoiceIndex, humanChoice);
   updateWinCounter(winnerOfRound, winCounter);
-  prompt(`You chose ${humanChoice}. The computer choice ${cpuChoice}`);
+  prompt(`You chose ${humanChoice}. The computer chose ${cpuChoice}`);
   dipslayWinner(winnerOfRound);
 
   let grandWinner = calcGrandWinner(winCounter);
