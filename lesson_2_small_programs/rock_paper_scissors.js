@@ -91,13 +91,13 @@ function calcWinner(cpuIndex, userChoice) {
   const cpuWinFormula = cpuIndex - userChoiceIndex;
 
   if (cpuWinCondition.includes(cpuWinFormula)) {
-    return PROMPT_MESSAGES['cpuWin'];
+    return 'cpuWin';
   }
   if (cpuIndex === userChoiceIndex) {
-    return PROMPT_MESSAGES['tie'];
+    return 'tie';
   }
 
-  return PROMPT_MESSAGES['win'];
+  return 'win';
 
 }
 
@@ -110,19 +110,19 @@ function updateWinCounter(roundWinner, counter) {
 
 // Prints winner on screen
 function dipslayWinner (winner) {
-  prompt(winner);
+  prompt(PROMPT_MESSAGES[winner]);
 }
 
 // Calculates the grand winner
 function calcGrandWinner (counter) {
-  if (counter.cpu === 5) return PROMPT_MESSAGES['grandWinnerCpu'];
-  if (counter.human === 5) return PROMPT_MESSAGES['grandWinnerHuman'];
+  if (counter.cpu === 5) return 'grandWinnerCpu';
+  if (counter.human === 5) return 'grandWinnerHuman';
   return 0;
 }
 
 // Prints grand winner to the screen
 function displayGrandWinner(grandWinner) {
-  prompt(grandWinner);
+  prompt(PROMPT_MESSAGES[grandWinner]);
 }
 
 // Validates play again input
