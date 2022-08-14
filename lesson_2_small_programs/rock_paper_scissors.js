@@ -162,7 +162,6 @@ function askToPlayAgain() {
   return getValidPlayAgain(answer);
 }
 
-
 // Validates play again input
 function getValidPlayAgain(answer) {
   while ((answer[0] !== 'n' && answer !== 'y')) {
