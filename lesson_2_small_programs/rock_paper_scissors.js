@@ -5,9 +5,9 @@ const winCounter = createWinCounter();
 
 // Main program gets input and calls functions
 while (true) {
-  rules();
+  displayRules();
   while (true) {
-    mainUI();
+    displayMainUI();
     let humanChoice = askForChoice();
 
     let cpuChoiceIndex = getRandomIndex();
@@ -19,6 +19,8 @@ while (true) {
 
     let grandWinner = calcGrandWinner(winCounter);
     if (grandWinner) {
+      console.clear();
+      dipslayWinner(winnerOfRound, humanChoice, cpuChoice);
       displayGrandWinner(grandWinner);
       resetScore(winCounter);
     }
@@ -40,7 +42,7 @@ function createWinCounter() {
 }
 
 // Details rule diffrences from normal RPS
-function rules() {
+function displayRules() {
   while (true) {
     console.clear();
     console.log(PROMPT_MESSAGES['rules']);
@@ -52,7 +54,7 @@ function rules() {
 }
 
 // Main ui for the same
-function mainUI() {
+function displayMainUI() {
   console.clear();
   displayWinCounter(winCounter);
   console.log("-- Best of 5 --\n");
