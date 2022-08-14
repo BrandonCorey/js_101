@@ -8,6 +8,7 @@ while (true) {
   displayRules();
   while (true) {
     displayMainUI();
+
     let humanChoice = askForChoice();
 
     let cpuChoiceIndex = getRandomIndex();
