@@ -29,7 +29,6 @@ while (true) {
     let response = askToPlayAgain();
     if (response[0] !== 'y') break;
   }
-
   break;
 }
 
@@ -39,7 +38,6 @@ function createWinCounter() {
     cpu: 0,
     human: 0
   };
-
   return counterObj;
 }
 
@@ -92,7 +90,6 @@ function checkAbbreviation(choice) {
     case 'sp':
       return 'spock';
   }
-
   return choice;
 }
 
@@ -103,7 +100,6 @@ function checkValidChoice (choice) {
     choice = readline.question();
     choice = checkAbbreviation(choice.toLowerCase());
   }
-
   return choice;
 }
 
@@ -126,7 +122,6 @@ function calcWinner(cpuIndex, userChoice) {
   if (cpuIndex === userChoiceIndex) {
     return 'tie';
   }
-
   return 'win';
 }
 
@@ -173,7 +168,6 @@ function getValidPlayAgain(answer) {
     prompt(PROMPT_MESSAGES["errorYorN"]);
     answer = readline.question().toLowerCase();
   }
-
   return answer;
 }
 
