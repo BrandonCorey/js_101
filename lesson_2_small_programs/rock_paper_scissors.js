@@ -98,6 +98,7 @@ function checkValidChoice (choice) {
     choice = readline.question();
     choice = checkAbbreviation(choice.toLowerCase());
   }
+
   return choice;
 }
 
