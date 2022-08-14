@@ -43,7 +43,10 @@ function rules() {
   while (true) {
     console.clear();
     console.log(PROMPT_MESSAGES['rules']);
-    if (readline.question("Press 's' to begin: ")) break;
+    let response = readline.question('Enter "s" to begin: ');
+    if (response === 's') {
+      break;
+    }
   }
 }
 
