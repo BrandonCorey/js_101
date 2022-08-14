@@ -31,7 +31,6 @@ while (true) {
   }
 
   break;
-
 }
 
 // Creates win couinter for CPU and human
@@ -40,6 +39,7 @@ function createWinCounter() {
     cpu: 0,
     human: 0
   };
+
   return counterObj;
 }
 
@@ -92,6 +92,7 @@ function checkAbbreviation(choice) {
     case 'sp':
       return 'spock';
   }
+
   return choice;
 }
 
@@ -127,7 +128,6 @@ function calcWinner(cpuIndex, userChoice) {
   }
 
   return 'win';
-
 }
 
 // Updates the win counter each round
@@ -173,6 +173,7 @@ function getValidPlayAgain(answer) {
     prompt(PROMPT_MESSAGES["errorYorN"]);
     answer = readline.question().toLowerCase();
   }
+
   return answer;
 }
 
