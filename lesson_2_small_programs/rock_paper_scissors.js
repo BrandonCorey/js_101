@@ -39,6 +39,7 @@ function createWinCounter() {
   return counterObj;
 }
 
+// Details rule diffrences from normal RPS
 function rules() {
   while (true) {
     console.clear();
@@ -50,6 +51,7 @@ function rules() {
   }
 }
 
+// Main ui for the same
 function mainUI() {
   console.clear();
   displayWinCounter(winCounter);
@@ -58,11 +60,13 @@ function mainUI() {
   console.log(PROMPT_MESSAGES['abbreviatons']);
 }
 
+// Helper function to display wins in UI
 function displayWinCounter (counter) {
   prompt(`Cpu wins: ${counter.cpu}`);
   prompt(`Your wins: ${counter.human}`);
 }
 
+// Asks for user choice (RPSLSP)
 function askForChoice() {
   let humanChoice = readline.question().toLowerCase();
   humanChoice = checkAbbreviation(humanChoice);
