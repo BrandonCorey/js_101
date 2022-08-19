@@ -1,5 +1,6 @@
 function isPalindromicNumber(number) {
   if (!(Number.isInteger(number))) return false;
+
   number = String(number);
   let reversed = number.split('').reverse('').join('');
   return number === reversed;
