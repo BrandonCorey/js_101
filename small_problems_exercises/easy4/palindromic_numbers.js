@@ -1,12 +1,8 @@
 function isPalindromicNumber(number) {
   if (!(Number.isInteger(number))) return false;
-
   number = String(number);
-  let numberCopy = number.split('');
-  number = number.split('');
-
-  numberCopy = numberCopy.reverse();
-  return number.join('') === numberCopy.join('');
+  let reversed = number.split('').reverse('').join('');
+  return number === reversed;
 }
 
 console.log(isPalindromicNumber(34543));        // true
