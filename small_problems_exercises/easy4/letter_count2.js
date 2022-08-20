@@ -1,7 +1,8 @@
 function wordSizes(string) {
-  let stringArr = string.split(' ');
+  let stringArr = string.split('').filter(word => /[a-z\s]/i.test(word));
+  stringArr = stringArr.join('');
+  stringArr = stringArr.split(' ');
   let lengthOccurences = {};
-  if (stringArr.length === 0) return lengthOccurences;
 
   for (let word of stringArr) {
     let len = word.length;
