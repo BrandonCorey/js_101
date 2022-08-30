@@ -7,13 +7,12 @@
 function buyFruit(nestedArray) {
   const results = [];
   nestedArray.forEach(array => {
-    pushFunc(array, results);
+    pushFruit(array, results);
   });
   return results;
 }
 
-
-function pushFunc(inputArr, outputArr) {
+function pushFruit(inputArr, outputArr) {
   let [fruit, repeat] = inputArr;
   for (let counter = 0; counter < repeat; counter++)  {
     outputArr.push(fruit);
