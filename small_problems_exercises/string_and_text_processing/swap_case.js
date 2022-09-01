@@ -5,7 +5,8 @@
 
 function swapCase(string) {
   return [...string].map(char => {
-    return char.toUpperCase() === char ? char.toLowerCase() : char.toUpperCase();
+    return char.toUpperCase() === char ?
+      char.toLowerCase() : char.toUpperCase();
   }).join('');
 }
 
