@@ -9,7 +9,7 @@
 function rotateRightmostDigits(digits, numToRotate) {
   digits = String(digits);
   let digitsToRotate = [...String(digits)].slice(-numToRotate);
-  digitsToRotate.splice(digitsToRotate.length - 1, 1, digitsToRotate.shift()); // Rotated digits
+  digitsToRotate.splice(digitsToRotate.length - 1, 0, digitsToRotate.shift()); // Rotated digits
   return digits.slice(0, digits.length - numToRotate) + digitsToRotate.join('');
 }
 
