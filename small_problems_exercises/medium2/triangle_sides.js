@@ -4,22 +4,22 @@
 // 'equilateral', 'isosceles', 'scalene', or 'invalid'.
 
 function triangle(side0, side1, side2) {
-  const arr = [side0, side1, side2].sort((a, b) => Number(a) - Number(b));
-  const [smallest, secondSmallest, largest] = arr;
+  const sides = [side0, side1, side2].sort((a, b) => Number(a) - Number(b));
+  const [smallest, secondSmallest, largest] = sides;
 
   if (smallest + secondSmallest <= largest) return 'invalid';
 
-  let differentLengths = getLenFreq(arr);
+  let differentLengths = getLenFreq(sides);
 
   if (differentLengths === 1) return 'equilateral';
   if (differentLengths === 2) return 'isosceles';
   else return 'scalene';
 }
 
-function getLenFreq(arr) {
+function getLenFreq(sides) {
   const freq = {};
 
-  arr.forEach(element => {
+  sides.forEach(element => {
     freq[element] = freq[element] || 0;
     freq[element] += 1;
   });
