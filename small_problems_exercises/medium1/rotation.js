@@ -6,7 +6,7 @@ function rotateArray(numArray) {
   if (numArray.length === 0) return [];
 
   let copyArr = numArray.slice();
-  copyArr.splice(copyArr.length - 1, 1, copyArr.shift());
+  copyArr.splice(copyArr.length - 1, 0, copyArr.shift());
   return copyArr;
 }
 
