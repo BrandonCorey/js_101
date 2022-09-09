@@ -29,6 +29,5 @@ console.log(letterPercentages('abCdef 123'));
 
 console.log(letterPercentages('AbCd +Ef'));
 // { lowercase: "37.50", uppercase: "37.50", neither: "25.00" }
-console.log(
-letterPercentages('123'));
+console.log(letterPercentages('123'));
 // { lowercase: "0.00", uppercase: "0.00", neither: "100.00" }
