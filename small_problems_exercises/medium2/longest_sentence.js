@@ -29,14 +29,13 @@ let longerText = longText +
 function longestSentence(text) {
   let maxLength = 0;
   let sentences = text.match(/[a-z].*?[.!?]/gi);
-  let splitAtSpace = text.split(' ');
 
-  return text.split(/[.?!]/).filter(sentence => {
+  return sentences.filter(sentence => {
     let sentenceLength = sentence.split(' ').length;
 
     if (sentenceLength > maxLength) maxLength = sentenceLength;
     return sentenceLength === maxLength;
-  }) + `${splitAtSpace[0]} + \nThe longest sentence has ${maxLength} words.`;
+  }) + `\nThe longest sentence has ${maxLength} words.`;
 }
 
 
