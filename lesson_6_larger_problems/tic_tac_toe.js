@@ -1,40 +1,57 @@
 const readline = require('readline-sync');
-
 const EMPTY_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
-
+const GAMES_TO_WIN = 5;
+const USER_NAME = 'User';
+const COMPUTER_NAME = 'Cpu';
 
 while (true) {
-  let board = initializeBoard();
-
+  let score = initializeScore();
   while (true) {
+
+    let board = initializeBoard();
+    while (true) {
+
+      displayScore(score);
+      displayBoard(board);
+
+      playerChooseSquare(board);
+
+      if (someoneWon(board) || boardFull(board)) break;
+
+      computerChooseSquare(board);
+      if (someoneWon(board) || boardFull(board)) break;
+    }
+
     displayBoard(board);
-    playerChooseSquare(board);
-    if (someoneWon(board) || boardFull(board)) break;
 
-    computerChooseSquare(board);
-    if (someoneWon(board) || boardFull(board)) break;
+    updateScore(board, score);
+    displayScore(score);
+
+    if (someOneWonMatch(score)) {
+      prompt(`${detectGrandWinner(score)} is the winner of the match!`);
+      resetScore(score);
+    } else if (someoneWon(board)) {
+      prompt(`${detectWinner(board)} won!`);
+    } else {
+      prompt('It\'s a tie!');
+    }
+
+    prompt('Would you like to play again? (y or n)');
+
+    let answer = readline.question().toLowerCase();
+    if (answer === 'n') break;
+
+    while (answer !== 'y' && answer !== 'n')  {
+      prompt('Whoops, enter a valid response!');
+      answer = readline.question().toLowerCase();
+    }
+
   }
-
-  displayBoard(board);
-
-  if (someoneWon(board)) prompt(`${detectWinner(board)} won!`);
-  if (boardFull(board)) prompt('It\'s a tie!');
-
-  prompt('Would you like to play again? (y or n)');
-
-  let answer = readline.question().toLowerCase();
-  if (answer !== 'y') break;
-
-  while (answer !== 'y' && answer !== 'n')  {
-    prompt('Whoops, enter a valid response!');
-    answer = readline.question().toLowerCase();
-  }
-
+  prompt('Thanks for playing Tic Tac Toe!');
 }
 
-prompt('Thanks for playing Tic Tac Toe!');
 
 function initializeBoard() {
   let board = [];
@@ -45,10 +62,29 @@ function initializeBoard() {
   return board;
 }
 
-function displayBoard(board) {
-  console.clear();
+function initializeScore() {
+  let score = {Cpu: 0, User: 0};
+  return score;
+}
 
-  console.log(`You are ${HUMAN_MARKER}. Computer is ${COMPUTER_MARKER}.`);
+function updateScore(board, scores) {
+  if (detectWinner(board) === USER_NAME) scores[USER_NAME] += 1;
+  if (detectWinner(board) === COMPUTER_NAME) scores[COMPUTER_NAME] += 1;
+  return scores;
+}
+
+function displayScore(scores) {
+  console.clear();
+  let computerScore = scores[COMPUTER_NAME];
+  let userScore = scores[USER_NAME];
+  console.log(
+    `--------------\nUser score: ${userScore}\n Cpu score: ${computerScore}\n--------------\n`
+  );
+}
+
+function displayBoard(board) {
+
+  console.log(`${USER_NAME} is ${HUMAN_MARKER}. ${COMPUTER_NAME} is ${COMPUTER_MARKER}.`);
 
   console.log('');
   console.log('     |     |');
@@ -72,7 +108,7 @@ function playerChooseSquare(board) {
 
 
   while (true) {
-    prompt(`Choose a square (${emptySquares.join(', ')}):`);
+    prompt(`Choose a square (${joinOr(emptySquares)}):`);
     square = readline.question().trim();
 
     if (emptySquares.includes(square)) break;
@@ -116,15 +152,31 @@ function detectWinner(board) {
       board[sq2] === HUMAN_MARKER &&
       board[sq3] === HUMAN_MARKER
 
-    ) return 'You';
+    ) return USER_NAME;
     if (
       board[sq1] === COMPUTER_MARKER &&
       board[sq2] === COMPUTER_MARKER &&
       board[sq3] === COMPUTER_MARKER
 
-    ) return 'Computer';
+    ) return COMPUTER_NAME;
   }
   return null;
+}
+
+function someOneWonMatch(score) {
+  return !!detectGrandWinner(score);
+}
+
+// Calculates the grand winner
+function detectGrandWinner (score) {
+  if (score.Cpu === GAMES_TO_WIN) return COMPUTER_NAME;
+  if (score.User === GAMES_TO_WIN) return USER_NAME;
+  return 0;
+}
+
+function resetScore(score) {
+  score[COMPUTER_NAME] = 0;
+  score[USER_NAME] = 0;
 }
 
 // Helper Functions
@@ -137,6 +189,15 @@ function getEmptySquares(board) {
 
 function prompt(string) {
   console.log('=> ' + string);
+}
+
+function joinOr(array, delimiter = ', ', conjunction = 'or') {
+  return array.map((element, idx) => {
+    if (array.length === 1) return element;
+    if (array.length === 2) delimiter = ' ';
+
+    return (idx === array.length - 1 ? `${conjunction} ${element}` : element);
+  }).join(delimiter);
 }
 
 // High level psuedo-code:
