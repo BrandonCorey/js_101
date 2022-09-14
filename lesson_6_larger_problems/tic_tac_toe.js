@@ -5,6 +5,7 @@ const COMPUTER_MARKER = 'O';
 const GAMES_TO_WIN = 5;
 const USER_NAME = 'User';
 const COMPUTER_NAME = 'Cpu';
+const playerOrder = [COMPUTER_NAME, USER_NAME];
 
 const winCondition = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
@@ -19,13 +20,12 @@ while (true) {
     while (true) {
 
       displayScore(score);
+      computerChooseSquare(board);
       displayBoard(board);
 
+      if (someoneWon(board) || boardFull(board)) break;
       playerChooseSquare(board);
 
-      if (someoneWon(board) || boardFull(board)) break;
-
-      computerChooseSquare(board);
       if (someoneWon(board) || boardFull(board)) break;
     }
 
@@ -91,6 +91,17 @@ function displayBoard(board) {
   console.log('');
 }
 
+function whoGoesFirst(userChoose, cpuChoose) {
+  let first = playerOrder[0];
+  if (first === USER_NAME) return userChoose;
+  if (first === COMPUTER_NAME) return cpuChoose;
+}
+
+function whoGoesSecond(userChoose, cpuChoose) {
+  let second = playerOrder[1];
+  if (second === USER_NAME) return userChoose;
+  if (second === COMPUTER_NAME) return cpuChoose;
+}
 // Gets input from player to choose square
 function playerChooseSquare(board) {
   let square;
@@ -111,30 +122,56 @@ function playerChooseSquare(board) {
 
 // Calculates choice for compouter to choose square
 function computerChooseSquare(board) {
-  let emptySquares = getEmptySquares(board);
   let square;
 
-  for (let idx = 0; idx < winCondition.length; idx++) {
-    let line = winCondition[idx];
-    square = findAtRiskSquare(line, board);
-    if (square) break;
-  }
-
-
-  if (!square) {
-    let randomIdx = Math.floor(Math.random() * emptySquares.length);
-    square = emptySquares[randomIdx];
-  }
+  square = cpuOffense(board);
+  if (!square) square = cpuDefense(board,square);
+  if (!square) square = cpuRandom(board, square);
 
   board[square] = COMPUTER_MARKER;
 
 }
+function cpuOffense(board) {
+  for (let idx = 0; idx < winCondition.length; idx++) {
+    let line = winCondition[idx];
+    let square = findAtRiskSquare(line, board, COMPUTER_MARKER);
+    if (square) return square;
+  }
+  return null;
+}
 
-function findAtRiskSquare(winningLines, board) {
-  let winningSquares = winningLines.map(square => board[square]);
-  if (winningSquares.filter(square => square === HUMAN_MARKER).length === 2) {
-    let dangerSquare = winningLines.find(square => board[square] === EMPTY_MARKER);
-    return dangerSquare;
+function cpuDefense(board, square) {
+  for (let idx = 0; idx < winCondition.length; idx++) {
+    let line = winCondition[idx];
+    square = findAtRiskSquare(line, board, HUMAN_MARKER);
+    if (square) return square;
+  }
+  return null;
+}
+
+function cpuRandom(board, square) {
+  let randomIdx = Math.floor(Math.random() * getEmptySquares(board).length);
+  let emptySpaces = getEmptySquares(board);
+  if (spaceFiveOpen(emptySpaces)) {
+    square = spaceFiveOpen(emptySpaces);
+    return square;
+  } else {
+    square = getEmptySquares(board)[randomIdx];
+    return square;
+  }
+}
+
+function spaceFiveOpen(emptySquares) {
+  let middleSquare = 5;
+  if (emptySquares.includes(String(middleSquare))) return middleSquare;
+  return null;
+}
+
+function findAtRiskSquare(winningLine, board, marker) {
+  let markersInLine = winningLine.map(square => board[square]);
+  if (markersInLine.filter(value => value === marker).length === 2) {
+    let dangerSqr = winningLine.find(square => board[square] === EMPTY_MARKER);
+    if (dangerSqr !== undefined) return dangerSqr;
   }
   return null;
 }
