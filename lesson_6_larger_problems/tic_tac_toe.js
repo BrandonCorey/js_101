@@ -3,35 +3,39 @@ const EMPTY_MARKER = ' ';
 const HUMAN_MARKER = 'X';
 const COMPUTER_MARKER = 'O';
 const GAMES_TO_WIN = 5;
-const USER_NAME = 'User';
-const COMPUTER_NAME = 'Cpu';
-const playerOrder = [COMPUTER_NAME, USER_NAME];
-
+const USER_NAME = 'user';
+const COMPUTER_NAME = 'cpu';
 const winCondition = [
   [1, 2, 3], [4, 5, 6], [7, 8, 9], [1, 4, 7],
   [2, 5, 8], [3, 6, 9], [1, 5, 9], [3, 5, 7]
 ];
 
+let playerOne;
+
 while (true) {
+
   let score = initializeScore();
+
+  setUpGame();
+
   while (true) {
 
     let board = initializeBoard();
+
     while (true) {
 
-      displayScore(score);
-      computerChooseSquare(board);
-      displayBoard(board);
+      displayMainUI(board, score);
 
+      whoGoesFirst(board);
+      displayMainUI(board, score);
       if (someoneWon(board) || boardFull(board)) break;
-      playerChooseSquare(board);
 
+      whoGoesSecond(board);
       if (someoneWon(board) || boardFull(board)) break;
     }
 
     updateScore(board, score);
-    displayScore(score);
-    displayBoard(board);
+    displayMainUI(board, score);
 
     if (someOneWonMatch(score)) {
       prompt(`${detectMatchWinner(score)} is the winner of the match!`);
@@ -49,8 +53,29 @@ while (true) {
   prompt('Thanks for playing Tic Tac Toe!');
 }
 
+function setUpGame() {
+  console.clear();
+  console.log(`==================================
+INTENSE GAME OF TIC-TAC-TOE      =
+----------------------------------
+Who will go first: ${COMPUTER_NAME} or ${USER_NAME}?  =
+==================================`
+  );
+
+  playerOne = readline.question('=> ').toLowerCase();
+
+  while (
+    playerOne.toLowerCase() !== COMPUTER_NAME.toLowerCase() &&
+    playerOne.toLowerCase() !== USER_NAME.toLocaleLowerCase()
+  ) {
+    prompt('Sorry, enter a valid input!');
+    playerOne = readline.question();
+  }
+
+}
+
 function initializeScore() {
-  let score = {Cpu: 0, User: 0};
+  let score = {cpu: 0, user: 0};
   return score;
 }
 
@@ -61,6 +86,11 @@ function initializeBoard() {
     board[square] = EMPTY_MARKER;
   }
   return board;
+}
+
+function displayMainUI(board, scores) {
+  displayScore(scores);
+  displayBoard(board);
 }
 
 function displayScore(scores) {
@@ -91,16 +121,16 @@ function displayBoard(board) {
   console.log('');
 }
 
-function whoGoesFirst(userChoose, cpuChoose) {
-  let first = playerOrder[0];
-  if (first === USER_NAME) return userChoose;
-  if (first === COMPUTER_NAME) return cpuChoose;
+function whoGoesFirst(board) {
+  let first = playerOne;
+  if (first === USER_NAME) return playerChooseSquare(board);
+  return computerChooseSquare(board);
 }
 
-function whoGoesSecond(userChoose, cpuChoose) {
-  let second = playerOrder[1];
-  if (second === USER_NAME) return userChoose;
-  if (second === COMPUTER_NAME) return cpuChoose;
+function whoGoesSecond(board) {
+  let first = playerOne;
+  if (first !== USER_NAME) return playerChooseSquare(board);
+  return computerChooseSquare(board);
 }
 // Gets input from player to choose square
 function playerChooseSquare(board) {
