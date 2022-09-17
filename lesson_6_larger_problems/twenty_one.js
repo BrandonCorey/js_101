@@ -11,20 +11,23 @@
 const readline = require('readline-sync');
 const TWENTY_ONE = 21;
 
-console.clear();
-
 let deck = initializeDeck();
 shuffle(deck);
 
-let dealerInitial = dealerTurn(deck)
-displayDealerHand(dealerInitial)
+let dealerInitial = dealerTurn(deck);
+displayDealerHand(dealerInitial);
 
-let playerHand = playerTurn(deck);
+let playerHand = playerTurn(deck, dealerInitial);
 
 let dealerFinalHand = dealerTurn(deck, playerHand, dealerInitial);
-displayDealerHand(null, dealerFinalHand);
 
-displayFinalHands(dealerFinalHand, playerHand);
+displayCurrentHands(playerHand, cardTotal(playerHand), null, dealerFinalHand);
+
+displayTotals(dealerFinalHand, playerHand);
+
+let winner = calculateWinner(cardTotal(dealerFinalHand), cardTotal(playerHand));
+
+displayWinner(winner);
 
 
 function initializeDeck() {
@@ -72,7 +75,7 @@ function cardTotal(cards) {
   }, 0);
 }
 
-function playerTurn(deck) {
+function playerTurn(deck, dealerInitial) {
   let hand = [];
   let total;
 
@@ -85,7 +88,7 @@ function playerTurn(deck) {
   
     total = Number(cardTotal(hand));
 
-    displayPlayerHand(hand, total);
+    displayCurrentHands(hand, total, dealerInitial);
    
     if (bust(total) || total ===  TWENTY_ONE) break;
 
@@ -96,26 +99,38 @@ function playerTurn(deck) {
 
   if (bust(total)) prompt('You busted!');
   else prompt('You chose to stay!');
-  return hand;;
+  return hand;
 }
 
-function dealerTurn(deck, playerHand = [0], dealerInitial = 0) {
-  let total;
+function dealerTurn(deck, playerHand, dealerInitial = null) {
   let hand = [];
 
   while (true) {
-
-  if (dealerInitial) {
+    
+    if (dealerInitial) {
+  
     hand = dealerInitial;
-    break;
-  }
 
-   hand.push(dealCards(deck));
+    if (bust(cardTotal(playerHand))) break;
+
+    if (cardTotal(hand) ===  TWENTY_ONE) break;
+
+    if (cardTotal(hand) >= cardTotal(playerHand)) break;
+
+    if (cardTotal(hand) >= 17 || bust(cardTotal(hand))) break;
+
+    while (cardTotal(hand) <= cardTotal(playerHand)) {
+      hand.push(dealCards(deck));
+
+    }
   
-   let total = cardTotal(hand);
+  }
   
-   if (total> cardTotal(playerHand)) break;
-   if (total >= 17 || bust(total)) break;
+    if (hand.length < 2) {
+      hand.push(dealCards(deck));
+    }
+
+    break;
   }
 
   return hand;
@@ -130,39 +145,72 @@ function prompt(string) {
   return console.log('=> ' + string);
 }
 
-function displayPlayerHand(hand, total) {
-  let currentView = '\nYour hand: \n';
-  if (hand.length > 2) currentView = '\nNew Card: \n'
+function displayCurrentHands(playerHand, PlayerhandTotal, dealerInitial, dealerFinal = null) {
+  console.clear();
+  if (dealerFinal) displayDealerHand(null, dealerFinal);
+  else displayDealerHand(dealerInitial);
 
-  if (hand.length > 2) hand = hand.slice(-1)
-  console.log(currentView)
+  displayPlayerHand(playerHand, PlayerhandTotal);
+}
+
+function displayPlayerHand(hand, total) {
+
+  console.log('\nYour hand: \n');
   console.log(hand);
-  console.log('\n------------------------------------------------')
-  console.log(`\n\nTotal: ${total}`);
+  console.log(`\n\nPlayer total: ${total}`);
+  console.log('------------------------------------------------');
+
 }
 
 function displayDealerHand(dealerInitial = null, dealerFinal = null) {
   if (dealerInitial) {
-    console.log('------------------------------------------------')
-    console.log('\nDealer hand: \n')
-    console.log(dealerInitial[0])
-    console.log('\n')
-    console.log('------------------------------------------------')
+    console.log('------------------------------------------------');
+    console.log('\nDealer hand: \n');
+    console.log(dealerInitial[0]);
+    console.log('\n');
+    console.log(`Dealer total: ${cardTotal(dealerInitial.slice(0,1))}`);
+    console.log('------------------------------------------------');
   } else {
-    console.log('------------------------------------------------')
-    console.log('\nDealer hand: \n')
-    console.log(dealerFinal)
-    console.log('\n')
-    console.log('------------------------------------------------')
+    console.log('------------------------------------------------');
+    console.log('\nDealer hand: \n');
+    console.log(dealerFinal);
+    console.log('\n');
+    console.log(`Dealer total: ${cardTotal(dealerFinal)}`);
+    console.log('------------------------------------------------');
   }
   
 }
 
-function displayFinalHands(dealerFinal, playerFinal) {
-  console.log(`\nThe player\'s final total: ${cardTotal(playerFinal)}\n`);
 
-  console.log(`The dealers final total: ${cardTotal(dealerFinal)}`);
+function displayTotals(dealerFinal, playerFinal) {
 
-  console.log('\n\n');
+  let playerTotal = cardTotal (playerFinal);
+  let dealerTotal = cardTotal(dealerFinal);
 
+  if (bust(playerTotal)) playerTotal = 'Busted';
+  if (bust(dealerTotal)) dealerTotal = 'Busted';
+
+  console.log(`\nThe player\'s final total: ${playerTotal}\n`);
+
+  console.log(`The dealers final total: ${dealerTotal}`);
+
+  console.log('\n');
+
+}
+
+function calculateWinner(dealerTotal, playerTotal) {
+  let winner = {'Dealer': dealerTotal, 'Player': playerTotal}
+  let [dealer, player] = Object.keys(winner);
+
+  if (bust(winner['Player'])) return dealer
+  if (bust(winner['Dealer'])) return player;
+
+  if (winner['Dealer'] > winner['Player']) return dealer;
+  if (winner['Dealer'] < winner['Player']) return player;
+
+  return 'draw'
+}
+
+function displayWinner(winner) {
+  prompt(`The winner of the game is the ${winner}!\n`);
 }
