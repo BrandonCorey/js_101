@@ -11,9 +11,21 @@
 const readline = require('readline-sync');
 const TWENTY_ONE = 21;
 
+console.clear();
+
 let deck = initializeDeck();
 shuffle(deck);
-playerTurn(deck);
+
+let dealerInitial = dealerTurn(deck)
+displayDealerHand(dealerInitial)
+
+let playerHand = playerTurn(deck);
+
+let dealerFinalHand = dealerTurn(deck, playerHand, dealerInitial);
+displayDealerHand(null, dealerFinalHand);
+
+displayFinalHands(dealerFinalHand, playerHand);
+
 
 function initializeDeck() {
   const suits = ["Spades", "Hearts", "Diamonds", "Clubs"];
@@ -49,6 +61,7 @@ function shuffle(deck) {
     let randomIdx = Math.floor(Math.random() * (idx + 1));
     [deck[idx], deck[randomIdx]] = [deck[randomIdx], deck[idx]];
   }
+
   return deck;
 }
 
@@ -64,42 +77,92 @@ function playerTurn(deck) {
   let total;
 
   while (true) {
-    if (hand.length < 2) {
-      hand.push(dealCards(deck));
-    }
+    if (hand.length < 2) hand.push(dealCards(deck));
 
     hand.push(dealCards(deck));
+
+   
+  
     total = Number(cardTotal(hand));
 
-    console.clear();
-    console.log(hand);
-    console.log(`\nTotal: ${total}`);
+    displayPlayerHand(hand, total);
+   
+    if (bust(total) || total ===  TWENTY_ONE) break;
 
-    if (bust(total)) break;
-    if (total === TWENTY_ONE) break;
-
-    let answer = readline.question(prompt("Hit or stay?"));
+    let answer = readline.question(prompt("Hit or stay?\n"));
     if (answer === 'stay') break;
   }
 
+
   if (bust(total)) prompt('You busted!');
   else prompt('You chose to stay!');
+  return hand;;
 }
 
-function dealerTurn(cards) {
-  let cardCount = 0;
+function dealerTurn(deck, playerHand = [0], dealerInitial = 0) {
+  let total;
+  let hand = [];
+
   while (true) {
-    cardCount += 1;
-    if (cardCount === 1) console.log(dealCards(cards));
-    if (cardTotal(cards) >= 17 || bust()) break;
+
+  if (dealerInitial) {
+    hand = dealerInitial;
+    break;
   }
+
+   hand.push(dealCards(deck));
+  
+   let total = cardTotal(hand);
+  
+   if (total> cardTotal(playerHand)) break;
+   if (total >= 17 || bust(total)) break;
+  }
+
+  return hand;
 }
 
 
 function bust(total) {
-  return total > 21;
+  return total > TWENTY_ONE;
 }
 
 function prompt(string) {
   return console.log('=> ' + string);
+}
+
+function displayPlayerHand(hand, total) {
+  let currentView = '\nYour hand: \n';
+  if (hand.length > 2) currentView = '\nNew Card: \n'
+
+  if (hand.length > 2) hand = hand.slice(-1)
+  console.log(currentView)
+  console.log(hand);
+  console.log('\n------------------------------------------------')
+  console.log(`\n\nTotal: ${total}`);
+}
+
+function displayDealerHand(dealerInitial = null, dealerFinal = null) {
+  if (dealerInitial) {
+    console.log('------------------------------------------------')
+    console.log('\nDealer hand: \n')
+    console.log(dealerInitial[0])
+    console.log('\n')
+    console.log('------------------------------------------------')
+  } else {
+    console.log('------------------------------------------------')
+    console.log('\nDealer hand: \n')
+    console.log(dealerFinal)
+    console.log('\n')
+    console.log('------------------------------------------------')
+  }
+  
+}
+
+function displayFinalHands(dealerFinal, playerFinal) {
+  console.log(`\nThe player\'s final total: ${cardTotal(playerFinal)}\n`);
+
+  console.log(`The dealers final total: ${cardTotal(dealerFinal)}`);
+
+  console.log('\n\n');
+
 }
