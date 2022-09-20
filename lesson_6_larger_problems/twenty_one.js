@@ -4,32 +4,84 @@
 //    - repeat until bust or stay
 // 4. If player bust, dealer wins.
 // 5. Dealer turn: hit or stay
-//    - repeat until total >= 17
+//    - repeat until total >= DEALER_MIN
 // 6. If dealer busts, player wins.
 // 7. Compare cards and declare
 
 const readline = require('readline-sync');
-const TWENTY_ONE = 21;
+const MAX_SCORE = 21;
+const DEALER_MIN = 17;
+const GAMES_TO_WIN = 3;
+const SCORE = {'Player': 0, 'Dealer': 0, 'Series': 'Best 3/5'};
 
-let deck = initializeDeck();
-shuffle(deck);
+// Game Engine
 
-let dealerInitial = dealerTurn(deck);
-displayDealerHand(dealerInitial);
+while (true) {
 
-let playerHand = playerTurn(deck, dealerInitial);
+  let deck = initializeDeck();
 
-let dealerFinalHand = dealerTurn(deck, playerHand, dealerInitial);
+  if (deck.length < 13) deck = initializeDeck();
 
-displayCurrentHands(playerHand, cardTotal(playerHand), null, dealerFinalHand);
+  while (true) {
 
-displayTotals(dealerFinalHand, playerHand);
+    shuffle(deck);
+  
+    let dealerInitialHand = dealerTurn(deck);
+    displayCurrentHands(null, dealerInitialHand, null);
+  
+    let playerHand = playerTurn(deck, dealerInitialHand);
+    let dealerFinalHand = dealerTurn(deck, dealerInitialHand);
+    displayCurrentHands(playerHand, null, dealerFinalHand);
+  
+    let finalTotals = calculateTotals(playerHand, dealerFinalHand);
+    displayTotals(finalTotals);
+  
+    let winner = calculateWinner(finalTotals);
+    updateScore(winner);
 
-let winner = calculateWinner(cardTotal(dealerFinalHand), cardTotal(playerHand));
+    displayCurrentHands(playerHand, null, dealerFinalHand);
 
-displayWinner(winner);
+    if (WinnerOfMatch(winner)) {
+      displayWinnerOfMatch(winner);
+      resetScore();
+    } else {
+      displayWinner(winner);
+    }
+  
+    if (convertedChoice(playAgain()) === 'no') break;
+  }
 
+  break;
+}
 
+// Nested functions
+
+// Deals cards to player
+function dealCards(deck) {
+  return shuffle(deck).pop();
+}
+
+// Calculates the total sum of the cards based on weight
+function cardTotal(cards) {
+  return cards.reduce((sum, card) => {
+    if (card.value === 'A' && card.weight + sum > 21) card.weight = 1;
+    return sum + card.weight;
+  }, 0);
+}
+
+// Calculates whether or not someone has busted
+function bust(total) {
+  return total > MAX_SCORE;
+}
+
+// Adds arrow to prompt for player
+function prompt(string) {
+  return console.log('=> ' + string);
+}
+
+// Main functions
+
+// Initalizes the deck for the game
 function initializeDeck() {
   const suits = ["Spades", "Hearts", "Diamonds", "Clubs"];
   const values = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"];
@@ -55,10 +107,7 @@ function initializeDeck() {
   return deck;
 }
 
-function dealCards(deck) {
-  return shuffle(deck).pop();
-}
-
+// Shuffles the deck for the game
 function shuffle(deck) {
   for (let idx = deck.length - 1; idx > 0; idx--) {
     let randomIdx = Math.floor(Math.random() * (idx + 1));
@@ -68,42 +117,10 @@ function shuffle(deck) {
   return deck;
 }
 
-function cardTotal(cards) {
-  return cards.reduce((sum, card) => {
-    if (card.value === 'A' && card.weight + sum > 21) card.weight = 1;
-    return sum + card.weight;
-  }, 0);
-}
-
-function playerTurn(deck, dealerInitial) {
+// Function for dealers turn
+function dealerTurn(deck, dealerInitial = null) {
   let hand = [];
   let total;
-
-  while (true) {
-    if (hand.length < 2) hand.push(dealCards(deck));
-
-    hand.push(dealCards(deck));
-
-   
-  
-    total = Number(cardTotal(hand));
-
-    displayCurrentHands(hand, total, dealerInitial);
-   
-    if (bust(total) || total ===  TWENTY_ONE) break;
-
-    let answer = readline.question(prompt("Hit or stay?\n"));
-    if (answer === 'stay') break;
-  }
-
-
-  if (bust(total)) prompt('You busted!');
-  else prompt('You chose to stay!');
-  return hand;
-}
-
-function dealerTurn(deck, playerHand, dealerInitial = null) {
-  let hand = [];
 
   while (true) {
     
@@ -111,24 +128,15 @@ function dealerTurn(deck, playerHand, dealerInitial = null) {
   
     hand = dealerInitial;
 
-    if (bust(cardTotal(playerHand))) break;
+    if (cardTotal(hand) >= DEALER_MIN || total) break;
 
-    if (cardTotal(hand) ===  TWENTY_ONE) break;
-
-    if (cardTotal(hand) >= cardTotal(playerHand)) break;
-
-    if (cardTotal(hand) >= 17 || bust(cardTotal(hand))) break;
-
-    while (cardTotal(hand) <= cardTotal(playerHand)) {
+    while (cardTotal(hand) < DEALER_MIN) {
       hand.push(dealCards(deck));
-
     }
   
   }
   
-    if (hand.length < 2) {
-      hand.push(dealCards(deck));
-    }
+    if (hand.length < 2) hand.push(dealCards(deck));
 
     break;
   }
@@ -136,32 +144,7 @@ function dealerTurn(deck, playerHand, dealerInitial = null) {
   return hand;
 }
 
-
-function bust(total) {
-  return total > TWENTY_ONE;
-}
-
-function prompt(string) {
-  return console.log('=> ' + string);
-}
-
-function displayCurrentHands(playerHand, PlayerhandTotal, dealerInitial, dealerFinal = null) {
-  console.clear();
-  if (dealerFinal) displayDealerHand(null, dealerFinal);
-  else displayDealerHand(dealerInitial);
-
-  displayPlayerHand(playerHand, PlayerhandTotal);
-}
-
-function displayPlayerHand(hand, total) {
-
-  console.log('\nYour hand: \n');
-  console.log(hand);
-  console.log(`\n\nPlayer total: ${total}`);
-  console.log('------------------------------------------------');
-
-}
-
+// Displays the dealers hand
 function displayDealerHand(dealerInitial = null, dealerFinal = null) {
   if (dealerInitial) {
     console.log('------------------------------------------------');
@@ -181,36 +164,170 @@ function displayDealerHand(dealerInitial = null, dealerFinal = null) {
   
 }
 
+// Function for players turn
+function playerTurn(deck, dealerInitial) {
+  let hand = [];
+  let total;
 
-function displayTotals(dealerFinal, playerFinal) {
+  while (true) {
 
+    if (hand.length < 2) hand.push(dealCards(deck));
+
+    hand.push(dealCards(deck));
+  
+    total = Number(cardTotal(hand));
+
+    displayCurrentHands(hand, total, dealerInitial);
+   
+    if (bust(total) || total ===  MAX_SCORE) break;
+
+    let answer = readline.question(prompt("(h)it or (s)tay?\n"));
+    while (!playerChoiceValid(answer)) {
+      prompt('Whoops! Please enter a valid choice...')
+      answer = readline.question();
+    }
+
+    if (convertedChoice(answer) === 'stay') break;
+  }
+
+  if (bust(total)) prompt('You busted!');
+  else prompt('You chose to stay!');
+  return hand;
+}
+
+// Displays the hand of the player
+function displayPlayerHand(hand, total) {
+  console.log('\nYour hand: \n');
+  console.log(hand);
+  console.log(`\n\nPlayer total: ${total}`);
+  console.log('------------------------------------------------');
+}
+
+// Displays the current hands of the player and dealer
+function displayCurrentHands(playerHand, dealerInitial, dealerFinal = null) {
+  console.clear();
+  displayMainUI();
+
+  if (dealerFinal) displayDealerHand(null, dealerFinal);
+  else displayDealerHand(dealerInitial);
+
+  if (playerHand) displayPlayerHand(playerHand, cardTotal(playerHand));
+}
+
+// Displays the score of the series
+function displayMainUI() {
+  console.log(`Series: ${SCORE.Series}`);
+  console.log('------------------------------------------------');
+  console.log(`Dealer Score: ${SCORE.Dealer}`);
+  console.log(`Player Score: ${SCORE.Player}`);
+}
+
+// Calculates the final weight totals for each player
+function calculateTotals(playerFinal, dealerFinal) {
   let playerTotal = cardTotal (playerFinal);
   let dealerTotal = cardTotal(dealerFinal);
+  return [playerTotal, dealerTotal];
+}
+
+// Displays the total card weights of the player and dealer
+function displayTotals(finalScores) {
+
+  let [playerTotal, dealerTotal] = finalScores
 
   if (bust(playerTotal)) playerTotal = 'Busted';
   if (bust(dealerTotal)) dealerTotal = 'Busted';
 
-  console.log(`\nThe player\'s final total: ${playerTotal}\n`);
+  console.log(`The dealer\'s final total: ${dealerTotal}`);
 
-  console.log(`The dealers final total: ${dealerTotal}`);
+  console.log(`\nThe player\'s final total: ${playerTotal}`);
 
-  console.log('\n');
+  console.log('------------------------------------------------');
 
 }
 
-function calculateWinner(dealerTotal, playerTotal) {
-  let winner = {'Dealer': dealerTotal, 'Player': playerTotal}
+// Calculates the winner of the game
+function calculateWinner(totalScores) {
+  let [playerTotal, dealerTotal] = totalScores;
+  let winner = {'Dealer': dealerTotal, 'Player': playerTotal};
   let [dealer, player] = Object.keys(winner);
 
-  if (bust(winner['Player'])) return dealer
+  if (bust(winner['Player'])) return dealer;
   if (bust(winner['Dealer'])) return player;
 
   if (winner['Dealer'] > winner['Player']) return dealer;
   if (winner['Dealer'] < winner['Player']) return player;
 
-  return 'draw'
+  return 'draw';
 }
 
+// Updates the score of the series
+function updateScore(winner) {
+  SCORE[winner] += 1;
+}
+
+function resetScore() {
+  for (let players in SCORE) {
+    SCORE[players] = 0;
+  }
+}
+
+// Displays the winner of the game
 function displayWinner(winner) {
-  prompt(`The winner of the game is the ${winner}!\n`);
+  if (winner === 'draw') prompt('It is a draw!')
+  else prompt(`The winner of the game is the ${winner}!\n`);
+}
+
+function WinnerOfMatch(winner) {
+  return SCORE[winner] === GAMES_TO_WIN;
+}
+
+function displayWinnerOfMatch(winner) {
+  console.log(`The ${winner} is the winner of the series!\n`);
+}
+
+// Asks player to play again
+function playAgain() {
+  prompt('Would you like to play again? (y)es or (n)o\n');
+  let playAgain = readline.question();
+
+  while (!playAgainValid(playAgain)) {
+    prompt('Whoops...Please enter a valid choice!');
+    playAgain = readline.question();
+  }
+  return playAgain;
+}
+
+// Validation functions
+
+// Converts abbreviations to correct choices
+function convertedChoice(choice) {
+  choice = choice.trim().toLowerCase();
+
+  switch (choice) {
+    case 'h':
+      choice = 'hit';
+      break;
+    case 's':
+      choice = 'stay';
+      break;
+    case 'y':
+      choice = 'yes';
+      break;
+    case 'n':
+      choice = 'no';
+      break;
+  }
+
+  if (choice) return choice;
+  return null;
+}
+
+// Checks for valid player choice
+function playerChoiceValid(choice) {
+  return convertedChoice(choice) === 'stay' || convertedChoice(choice) === 'hit';
+}
+
+// Validates response to play again question
+function playAgainValid(choice) {
+  return convertedChoice(choice) === 'yes' || convertedChoice(choice) === 'no';
 }
