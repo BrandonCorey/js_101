@@ -9,10 +9,11 @@
 // 7. Compare cards and declare
 
 const readline = require('readline-sync');
+const DIVIDER = '------------------------------------------------';
 const MAX_SCORE = 21;
 const DEALER_MIN = 17;
 const GAMES_TO_WIN = 3;
-const SCORE = {Player: 0, Dealer: 0, Series: 'Best 3/5'};
+const SCORE = {player: 0, dealer: 0, Series: 'Best 3/5'};
 
 // Game Engine
 
@@ -147,19 +148,19 @@ function dealerTurn(deck, dealerInitial = null) {
 // Displays the dealers hand
 function displayDealerHand(dealerInitial = null, dealerFinal = null) {
   if (dealerInitial) {
-    console.log('------------------------------------------------');
+    console.log(DIVIDER);
     console.log('\nDealer hand: \n');
     console.log(dealerInitial[0]);
     console.log('\n');
     console.log(`Dealer total: ${cardTotal(dealerInitial.slice(0,1))}`);
-    console.log('------------------------------------------------');
+    console.log(DIVIDER);
   } else {
-    console.log('------------------------------------------------');
+    console.log(DIVIDER);
     console.log('\nDealer hand: \n');
     console.log(dealerFinal);
     console.log('\n');
     console.log(`Dealer total: ${cardTotal(dealerFinal)}`);
-    console.log('------------------------------------------------');
+    console.log(DIVIDER);
   }
 
 }
@@ -200,7 +201,7 @@ function displayPlayerHand(hand, total) {
   console.log('\nYour hand: \n');
   console.log(hand);
   console.log(`\n\nPlayer total: ${total}`);
-  console.log('------------------------------------------------');
+  console.log(DIVIDER);
 }
 
 // Displays the current hands of the player and dealer
@@ -217,9 +218,9 @@ function displayGameplay(playerHand, dealerInitial, dealerFinal = null) {
 // Displays the score of the series
 function displayMainUI() {
   console.log(`Series: ${SCORE.Series}`);
-  console.log('------------------------------------------------');
-  console.log(`Dealer Score: ${SCORE.Dealer}`);
-  console.log(`Player Score: ${SCORE.Player}`);
+  console.log(DIVIDER);
+  console.log(`Dealer Score: ${SCORE.dealer}`);
+  console.log(`Player Score: ${SCORE.player}`);
 }
 
 // Calculates the final weight totals for each player
@@ -241,20 +242,20 @@ function displayTotals(finalScores) {
 
   console.log(`\nThe player's final total: ${playerTotal}`);
 
-  console.log('------------------------------------------------');
+  console.log(DIVIDER);
 }
 
 // Calculates the winner of the game
 function calculateWinner(totalScores) {
   let [playerTotal, dealerTotal] = totalScores;
-  let winner = {Dealer: dealerTotal, Player: playerTotal};
+  let winner = {dealer: dealerTotal, player: playerTotal};
   let [dealer, player] = Object.keys(winner);
 
-  if (bust(winner['Player'])) return dealer;
-  if (bust(winner['Dealer'])) return player;
+  if (bust(winner['player'])) return dealer;
+  if (bust(winner['dealer'])) return player;
 
-  if (winner['Dealer'] > winner['Player']) return dealer;
-  if (winner['Dealer'] < winner['Player']) return player;
+  if (winner['dealer'] > winner['player']) return dealer;
+  if (winner['dealer'] < winner['player']) return player;
 
   return 'draw';
 }
