@@ -27,19 +27,19 @@ while (true) {
     shuffle(deck);
   
     let dealerInitialHand = dealerTurn(deck);
-    displayCurrentHands(null, dealerInitialHand, null);
+    displayGameplay(null, dealerInitialHand, null);
   
     let playerHand = playerTurn(deck, dealerInitialHand);
     let dealerFinalHand = dealerTurn(deck, dealerInitialHand);
-    displayCurrentHands(playerHand, null, dealerFinalHand);
+    displayGameplay(playerHand, null, dealerFinalHand);
   
     let finalTotals = calculateTotals(playerHand, dealerFinalHand);
-    displayTotals(finalTotals);
   
     let winner = calculateWinner(finalTotals);
     updateScore(winner);
 
-    displayCurrentHands(playerHand, null, dealerFinalHand);
+    displayGameplay(playerHand, null, dealerFinalHand);
+    displayTotals(finalTotals);
 
     if (WinnerOfMatch(winner)) {
       displayWinnerOfMatch(winner);
@@ -177,7 +177,7 @@ function playerTurn(deck, dealerInitial) {
   
     total = Number(cardTotal(hand));
 
-    displayCurrentHands(hand, total, dealerInitial);
+    displayGameplay(hand, total, dealerInitial);
    
     if (bust(total) || total ===  MAX_SCORE) break;
 
@@ -204,7 +204,7 @@ function displayPlayerHand(hand, total) {
 }
 
 // Displays the current hands of the player and dealer
-function displayCurrentHands(playerHand, dealerInitial, dealerFinal = null) {
+function displayGameplay(playerHand, dealerInitial, dealerFinal = null) {
   console.clear();
   displayMainUI();
 
@@ -265,6 +265,7 @@ function updateScore(winner) {
   SCORE[winner] += 1;
 }
 
+// Resets the score of the series
 function resetScore() {
   for (let players in SCORE) {
     SCORE[players] = 0;
@@ -277,10 +278,12 @@ function displayWinner(winner) {
   else prompt(`The winner of the game is the ${winner}!\n`);
 }
 
+// Returns the winner of the series
 function WinnerOfMatch(winner) {
   return SCORE[winner] === GAMES_TO_WIN;
 }
 
+// Displays the winner of the match
 function displayWinnerOfMatch(winner) {
   console.log(`The ${winner} is the winner of the series!\n`);
 }
