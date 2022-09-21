@@ -12,7 +12,7 @@ const readline = require('readline-sync');
 const MAX_SCORE = 21;
 const DEALER_MIN = 17;
 const GAMES_TO_WIN = 3;
-const SCORE = {'Player': 0, 'Dealer': 0, 'Series': 'Best 3/5'};
+const SCORE = {Player: 0, Dealer: 0, Series: 'Best 3/5'};
 
 // Game Engine
 
@@ -25,16 +25,16 @@ while (true) {
   while (true) {
 
     shuffle(deck);
-  
+
     let dealerInitialHand = dealerTurn(deck);
     displayGameplay(null, dealerInitialHand, null);
-  
+
     let playerHand = playerTurn(deck, dealerInitialHand);
     let dealerFinalHand = dealerTurn(deck, dealerInitialHand);
     displayGameplay(playerHand, null, dealerFinalHand);
-  
+
     let finalTotals = calculateTotals(playerHand, dealerFinalHand);
-  
+
     let winner = calculateWinner(finalTotals);
     updateScore(winner);
 
@@ -47,7 +47,7 @@ while (true) {
     } else {
       displayWinner(winner);
     }
-  
+
     if (convertedChoice(playAgain()) === 'no') break;
   }
 
@@ -123,19 +123,19 @@ function dealerTurn(deck, dealerInitial = null) {
   let total;
 
   while (true) {
-    
+
     if (dealerInitial) {
-  
-    hand = dealerInitial;
 
-    if (cardTotal(hand) >= DEALER_MIN || total) break;
+      hand = dealerInitial;
 
-    while (cardTotal(hand) < DEALER_MIN) {
-      hand.push(dealCards(deck));
+      if (cardTotal(hand) >= DEALER_MIN || total) break;
+
+      while (cardTotal(hand) < DEALER_MIN) {
+        hand.push(dealCards(deck));
+      }
+
     }
-  
-  }
-  
+
     if (hand.length < 2) hand.push(dealCards(deck));
 
     break;
@@ -161,7 +161,7 @@ function displayDealerHand(dealerInitial = null, dealerFinal = null) {
     console.log(`Dealer total: ${cardTotal(dealerFinal)}`);
     console.log('------------------------------------------------');
   }
-  
+
 }
 
 // Function for players turn
@@ -174,16 +174,16 @@ function playerTurn(deck, dealerInitial) {
     if (hand.length < 2) hand.push(dealCards(deck));
 
     hand.push(dealCards(deck));
-  
+
     total = Number(cardTotal(hand));
 
     displayGameplay(hand, total, dealerInitial);
-   
+
     if (bust(total) || total ===  MAX_SCORE) break;
 
     let answer = readline.question(prompt("(h)it or (s)tay?\n"));
     while (!playerChoiceValid(answer)) {
-      prompt('Whoops! Please enter a valid choice...')
+      prompt('Whoops! Please enter a valid choice...');
       answer = readline.question();
     }
 
@@ -232,23 +232,22 @@ function calculateTotals(playerFinal, dealerFinal) {
 // Displays the total card weights of the player and dealer
 function displayTotals(finalScores) {
 
-  let [playerTotal, dealerTotal] = finalScores
+  let [playerTotal, dealerTotal] = finalScores;
 
   if (bust(playerTotal)) playerTotal = 'Busted';
   if (bust(dealerTotal)) dealerTotal = 'Busted';
 
-  console.log(`The dealer\'s final total: ${dealerTotal}`);
+  console.log(`The dealer's final total: ${dealerTotal}`);
 
-  console.log(`\nThe player\'s final total: ${playerTotal}`);
+  console.log(`\nThe player's final total: ${playerTotal}`);
 
   console.log('------------------------------------------------');
-
 }
 
 // Calculates the winner of the game
 function calculateWinner(totalScores) {
   let [playerTotal, dealerTotal] = totalScores;
-  let winner = {'Dealer': dealerTotal, 'Player': playerTotal};
+  let winner = {Dealer: dealerTotal, Player: playerTotal};
   let [dealer, player] = Object.keys(winner);
 
   if (bust(winner['Player'])) return dealer;
@@ -274,7 +273,7 @@ function resetScore() {
 
 // Displays the winner of the game
 function displayWinner(winner) {
-  if (winner === 'draw') prompt('It is a draw!')
+  if (winner === 'draw') prompt('It is a draw!');
   else prompt(`The winner of the game is the ${winner}!\n`);
 }
 
