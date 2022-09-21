@@ -204,7 +204,7 @@ function displayPlayerHand(hand, total) {
   console.log(DIVIDER);
 }
 
-// Displays the current hands of the player and dealer
+// Displays the current state of gameplay
 function displayGameplay(playerHand, dealerInitial, dealerFinal = null) {
   console.clear();
   displayMainUI();
