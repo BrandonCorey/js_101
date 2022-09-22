@@ -20,10 +20,9 @@ const SCORE = {player: 0, dealer: 0, Series: 'Best 3/5'};
 while (true) {
 
   let deck = initializeDeck();
-
-  if (deck.length < 13) deck = initializeDeck();
-
   while (true) {
+
+    if (deck.length < 13) deck = initializeDeck();
 
     shuffle(deck);
 
@@ -65,7 +64,7 @@ function dealCards(deck) {
 // Calculates the total sum of the cards based on weight
 function cardTotal(cards) {
   return cards.reduce((sum, card) => {
-    if (card.value === 'A' && card.weight + sum > 21) card.weight = 1;
+    if (card.value === 'A' && card.weight + sum > MAX_SCORE) card.weight = 1;
     return sum + card.weight;
   }, 0);
 }
