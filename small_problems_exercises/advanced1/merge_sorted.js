@@ -5,7 +5,6 @@
 function merge(arr0, arr1) {
   let result = [];
   let arr0Cnt = 0;
-
   let arr1Cnt = 0;
 
   if (arr0.length === 0) return arr1;

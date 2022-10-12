@@ -3,8 +3,8 @@
 function mergeSort(array) {
 
   if (array.length === 1) return array;
-  let arr0 = array.slice(0, array.length / 2);
-  let arr1 = array.slice(array.length / 2);
+  let arr0 = array.slice(0, midPoint(array));
+  let arr1 = array.slice(midPoint(array));
 
   arr0 = mergeSort(arr0);
   arr1 = mergeSort(arr1);
@@ -35,5 +35,5 @@ console.log(mergeSort([6, 2, 7, 1, 4]));        // [1, 2, 4, 6, 7]
 //console.log(mergeSort(['Sue', 'Pete', 'Alice', 'Tyler', 'Rachel', 'Kim', 'Bonnie']));
 // // ["Alice", "Bonnie", "Kim", "Pete", "Rachel", "Sue", "Tyler"]
 
-console.log(mergeSort([1, 3, 5, 6, 7, 9, 15, 18, 22, 23, 25, 35, 37, 43, 46, 51, 54]));
+console.log(mergeSort([9, 5, 7, 1, 10 ,11, 15, 4]));
 // // [1, 3, 5, 6, 7, 9, 15, 18, 22, 23, 25, 35, 37, 43, 46, 51, 54]
