@@ -35,11 +35,9 @@ function binarySearch(array, targetElement) {
   let midPoint = Math.floor(array.length / 2) - 1;
 
   for (let cycles = 0; cycles < array.length / 2; cycles++) {
-    
     centerElement = array[midPoint];
-
+    
     if (centerElement === targetElement) return midPoint;
-
     if (centerElement < targetElement) midPoint = Math.ceil((midPoint + array.length) / 2)
     else midPoint = Math.floor(midPoint / 2);
   }
