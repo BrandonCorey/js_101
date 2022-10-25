@@ -15,10 +15,14 @@ function scramble(str1, str2) {
   let idx = 0;
 
   while (sameChars && idx < [...str2].length) {
+
    if (!str1Chars.includes(str2[idx])) return false;
+
    str1Chars.splice(str1Chars.indexOf(str2[idx]), 1);
+
    idx += 1;
   }
+  
   return sameChars;
 }
 
