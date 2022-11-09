@@ -52,9 +52,21 @@ function deDupeArr(array) {
   }, [])
 }
 
-function getSum(array) {
-  
-}
+// Other solution
+// function smallerNumbersThanCurrent(array) {
+//   let result = [];
+//   for (let targetIdx = 0; targetIdx < array.length; targetIdx++) {
+//     let count = 0;
+//     for (let otherIdx = 0; otherIdx < array.length; otherIdx++) {
+//       if (
+//         array.indexOf(array[otherIdx]) ===  otherIdx &&
+//         array[targetIdx] > array[otherIdx]
+//       ) count += 1;
+//     }
+//     result.push(count);
+//   }
+//   return result;
+// }
 
 console.log(smallerNumbersThanCurrent([2, 2, 9, 3]));
 console.log(smallerNumbersThanCurrent([8, 1, 2, 2, 3])); // [3, 0, 1, 1, 2]

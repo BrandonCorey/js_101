@@ -30,6 +30,19 @@ function closestNumbers(array) {
   return resultArr.sort((a, b) => array.indexOf(a) - array.indexOf(b))
 }
 
+// Other solution
+// function closestNumbers(array) {
+//   let diffs = {};
+//   let sortedArr = array.slice().sort((a, b) => a - b);
+
+//   for (let idx = 0; idx < sortedArr.length - 1; idx++) {
+//     let diff = sortedArr[idx + 1] - sortedArr[idx];
+//     diffs[diff] = [sortedArr[idx], sortedArr[idx + 1]];
+//   }
+  
+//   return Object.values(diffs)[0].sort((a, b) => array.indexOf(a) - array.indexOf(b));
+
+// }
 
 // Need to return array of integers
 // - Return array of two elements
